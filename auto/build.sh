@@ -8,5 +8,6 @@ rfc3339_now() {
 
 docker build \
   --tag ggicci/jupyter:latest \
+  --tag ccr.ccs.tencentyun.com/ggicci/jupyter:latest \
   --build-arg arg_image_created="$( rfc3339_now )" \
   .
