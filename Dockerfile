@@ -2,7 +2,9 @@ FROM python:3.8-buster
 
 WORKDIR /app
 
-RUN pip install jupyterlab
+RUN \
+  pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ \
+  && pip install jupyterlab
 
 ARG arg_image_created
 
@@ -19,5 +21,4 @@ LABEL \
   me.ggicci.jupyter.image.title="Jupyter Lab" \
   me.ggicci.jupyter.image.description="Jupyter lab service"
 
-ENTRYPOINT [ "jupyter", "lab", "--no-browser", "--allow-root" ]
-
+ENTRYPOINT [ "jupyter", "lab", "--no-browser", "--allow-root", "--ip", "0.0.0.0", "--port", "80" ]

@@ -10,4 +10,3 @@ docker build \
   --tag ggicci/jupyter:latest \
   --build-arg arg_image_created="$( rfc3339_now )" \
   .
-
