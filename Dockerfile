@@ -1,16 +1,18 @@
 FROM python:3.8-buster
 
+ARG arg_image_created
+
 WORKDIR /app
+
+COPY ./entrypoint.sh /root/entrypoint.sh
 
 RUN \
   pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ \
-  && pip install jupyterlab
-
-ARG arg_image_created
+  && pip install --no-cache-dir jupyterlab
 
 LABEL \
   me.ggicci.jupyter.image.created="${arg_image_created}" \
-  me.ggicci.jupyter.image.version="0.1.0" \
+  me.ggicci.jupyter.image.version="0.1.6" \
   me.ggicci.jupyter.image.revision="" \
   me.ggicci.jupyter.image.authors="Ggicci <ggicci.t@gmail.com>" \
   me.ggicci.jupyter.image.url="https://images.ggicci.me/ggicci/jupyter" \
@@ -21,4 +23,5 @@ LABEL \
   me.ggicci.jupyter.image.title="Jupyter Lab" \
   me.ggicci.jupyter.image.description="Jupyter lab service"
 
-ENTRYPOINT [ "jupyter", "lab", "--no-browser", "--allow-root", "--ip", "0.0.0.0", "--port", "80" ]
+ENTRYPOINT [ "/root/entrypoint.sh" ]
+
