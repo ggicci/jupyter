@@ -4,10 +4,10 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-VERSION="$( grep "image.version" Dockerfile | awk -F'[="]' '{print $3}' )"
-
+VERSION="$( cat VERSION )"
 
 echo "Pushing to tencent cloud..."
 
 docker push ccr.ccs.tencentyun.com/ggicci/jupyter:${VERSION}
+docker push ccr.ccs.tencentyun.com/ggicci/jupyter:latest
 

@@ -4,7 +4,8 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-VERSION="$( grep "image.version" Dockerfile | awk -F'[="]' '{print $3}' )"
+VERSION="$( cat VERSION )"
+REVISION="$( date +%d%H%S )"
 
 
 rfc3339_now() {
@@ -22,5 +23,7 @@ docker build \
   --tag ccr.ccs.tencentyun.com/ggicci/jupyter:latest \
   --tag ccr.ccs.tencentyun.com/ggicci/jupyter:$VERSION \
   --build-arg arg_image_created="$( rfc3339_now )" \
+  --build-arg arg_image_version="$VERSION" \
+  --build-arg arg_image_revision="$REVISION" \
   .
 

@@ -1,6 +1,8 @@
 FROM python:3.8-buster
 
 ARG arg_image_created
+ARG arg_image_version
+ARG arg_image_revision
 
 WORKDIR /app
 
@@ -12,8 +14,8 @@ RUN \
 
 LABEL \
   me.ggicci.jupyter.image.created="${arg_image_created}" \
-  me.ggicci.jupyter.image.version="0.1.6" \
-  me.ggicci.jupyter.image.revision="" \
+  me.ggicci.jupyter.image.version="${arg_image_version}" \
+  me.ggicci.jupyter.image.revision="${arg_image_revision}" \
   me.ggicci.jupyter.image.authors="Ggicci <ggicci.t@gmail.com>" \
   me.ggicci.jupyter.image.url="https://images.ggicci.me/ggicci/jupyter" \
   me.ggicci.jupyter.image.documentation="https://github.com/ggicci/jupyter" \

@@ -1,10 +1,13 @@
 version: "3"
 
 services:
-  jupyterlab:
+  jupyter:
     image: ccr.ccs.tencentyun.com/ggicci/jupyter:latest
-    container_name: jupyterlab
+    container_name: jupyter
     restart: unless-stopped
+    environment:
+      - "TZ=Asia/Shanghai"
+      - "SHELL=/bin/bash"
     expose:
       - 80
     volumes:
@@ -13,3 +16,4 @@ services:
       options:
         max-size: "10M"
         max-file: "7"
+

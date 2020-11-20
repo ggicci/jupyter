@@ -22,5 +22,6 @@ c.LabApp.open_browser = False
 c.LabApp.allow_password_change = True
 " > /root/.jupyter/jupyter_notebook_config.py
 
+# Start jupyter lab server
 jupyter lab
 
