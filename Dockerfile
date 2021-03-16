@@ -4,13 +4,33 @@ ARG arg_image_created
 ARG arg_image_version
 ARG arg_image_revision
 
+ENV PIPENV_PYPI_MIRROR=https://mirrors.aliyun.com/pypi/simple/
+
+# Root dir of this app
 WORKDIR /app
 
-COPY ./entrypoint.sh /root/entrypoint.sh
-
+# Install global packages
 RUN \
-  pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ \
-  && pip install --no-cache-dir jupyterlab
+  pip config set global.index-url ${PIPENV_PYPI_MIRROR} \
+  && pip install --no-cache-dir jupyterlab==3.0.10 pipenv
+
+# Install kernel for python2
+RUN \
+  mkdir /app/kernel-2.7 && cd /app/kernel-2.7 \
+  && pipenv --python python2.7 \
+  && pipenv install ipykernel \
+  && pipenv --clear \
+  && KERNEL_VERSION=$( pipenv run python -V 2>&1 | cut -d' ' -f2 ) \
+  && pipenv run python -m ipykernel install --name "${KERNEL_VERSION}" --display "Python ${KERNEL_VERSION}"
+
+# Install kernel for python3
+RUN \
+  mkdir /app/kernel-3.8 && cd /app/kernel-3.8 \
+  && pipenv --python python3.8 \
+  && pipenv install ipykernel \
+  && pipenv --clear \
+  && KERNEL_VERSION=$( pipenv run python -V 2>&1 | cut -d' ' -f2 ) \
+  && pipenv run python -m ipykernel install --name "${KERNEL_VERSION}" --display "Python ${KERNEL_VERSION}"
 
 LABEL \
   me.ggicci.jupyter.image.created="${arg_image_created}" \
@@ -25,5 +45,5 @@ LABEL \
   me.ggicci.jupyter.image.title="Jupyter Lab" \
   me.ggicci.jupyter.image.description="Jupyter lab service"
 
-ENTRYPOINT [ "/root/entrypoint.sh" ]
+ENTRYPOINT [ "jupyter" ]
 

@@ -8,12 +8,13 @@ services:
     environment:
       - "TZ=Asia/Shanghai"
       - "SHELL=/bin/bash"
-    expose:
-      - 80
+    ports:
+      - "8888:80"
     volumes:
+      - "./jupyter_lab_config.py:/etc/jupyter/jupyter_lab_config.py"
       - "./data:/app"
+    command: ["lab"]
     logging:
       options:
         max-size: "10M"
         max-file: "7"
-
