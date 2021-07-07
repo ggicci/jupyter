@@ -6,18 +6,19 @@ ARG arg_image_revision
 
 ENV PIPENV_PYPI_MIRROR=https://mirrors.aliyun.com/pypi/simple/
 
-ENV PYTHON2_MINOR=2.7
-ENV PYTHON3_MINOR=3.9
 
 # Install global packages
 RUN \
   pip config set global.index-url ${PIPENV_PYPI_MIRROR} \
-  && pip install --no-cache-dir jupyterlab==3.0.10 pipenv
+  && pip install --no-cache-dir jupyterlab==3.0.16 pipenv
+
+# Root dir of this app
+WORKDIR /app
 
 # Install kernel for python2
 RUN \
-  mkdir /app/kernel-${PYTHON2_MINOR} && cd $_ \
-  && pipenv --python python${PYTHON2_MINOR} \
+  mkdir /app/kernel-2.7 && cd /app/kernel-2.7 \
+  && pipenv --python python2.7 \
   && pipenv install ipykernel \
   && pipenv --clear \
   && KERNEL_VERSION=$( pipenv run python -V 2>&1 | cut -d' ' -f2 ) \
@@ -25,8 +26,8 @@ RUN \
 
 # Install kernel for python3
 RUN \
-  mkdir /app/kernel-${PYTHON3_MINOR} && cd $_ \
-  && pipenv --python python${PYTHON3_MINOR} \
+  mkdir /app/kernel-3.9 && cd /app/kernel-3.9 \
+  && pipenv --python python3.9 \
   && pipenv install ipykernel \
   && pipenv --clear \
   && KERNEL_VERSION=$( pipenv run python -V 2>&1 | cut -d' ' -f2 ) \
@@ -45,8 +46,6 @@ LABEL \
   me.ggicci.jupyter.image.title="Jupyter Lab" \
   me.ggicci.jupyter.image.description="Jupyter lab service"
 
-# Root dir of this app
-WORKDIR /app
 
 ENTRYPOINT [ "jupyter" ]
 
