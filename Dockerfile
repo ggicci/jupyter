@@ -1,4 +1,4 @@
-FROM python:3.8-buster
+FROM python:3.9-buster
 
 ARG arg_image_created
 ARG arg_image_version
@@ -6,8 +6,8 @@ ARG arg_image_revision
 
 ENV PIPENV_PYPI_MIRROR=https://mirrors.aliyun.com/pypi/simple/
 
-# Root dir of this app
-WORKDIR /app
+ENV PYTHON2_MINOR=2.7
+ENV PYTHON3_MINOR=3.9
 
 # Install global packages
 RUN \
@@ -16,8 +16,8 @@ RUN \
 
 # Install kernel for python2
 RUN \
-  mkdir /app/kernel-2.7 && cd /app/kernel-2.7 \
-  && pipenv --python python2.7 \
+  mkdir /app/kernel-${PYTHON2_MINOR} && cd $_ \
+  && pipenv --python python${PYTHON2_MINOR} \
   && pipenv install ipykernel \
   && pipenv --clear \
   && KERNEL_VERSION=$( pipenv run python -V 2>&1 | cut -d' ' -f2 ) \
@@ -25,8 +25,8 @@ RUN \
 
 # Install kernel for python3
 RUN \
-  mkdir /app/kernel-3.8 && cd /app/kernel-3.8 \
-  && pipenv --python python3.8 \
+  mkdir /app/kernel-${PYTHON3_MINOR} && cd $_ \
+  && pipenv --python python${PYTHON3_MINOR} \
   && pipenv install ipykernel \
   && pipenv --clear \
   && KERNEL_VERSION=$( pipenv run python -V 2>&1 | cut -d' ' -f2 ) \
@@ -44,6 +44,9 @@ LABEL \
   me.ggicci.jupyter.image.licenses="MIT" \
   me.ggicci.jupyter.image.title="Jupyter Lab" \
   me.ggicci.jupyter.image.description="Jupyter lab service"
+
+# Root dir of this app
+WORKDIR /app
 
 ENTRYPOINT [ "jupyter" ]
 
