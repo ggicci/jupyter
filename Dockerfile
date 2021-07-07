@@ -1,11 +1,10 @@
-FROM python:3.9-buster
+FROM python:3.9.6-buster
 
 ARG arg_image_created
 ARG arg_image_version
 ARG arg_image_revision
 
 ENV PIPENV_PYPI_MIRROR=https://mirrors.aliyun.com/pypi/simple/
-
 
 # Install global packages
 RUN \
@@ -17,8 +16,8 @@ WORKDIR /app
 
 # Install kernel for python2
 RUN \
-  mkdir /app/kernel-2.7 && cd /app/kernel-2.7 \
-  && pipenv --python python2.7 \
+  mkdir -p /kernel/2.7 && cd /kernel/2.7 \
+  && PIPENV_VENV_IN_PROJECT=1 pipenv --python python2.7 \
   && pipenv install ipykernel \
   && pipenv --clear \
   && KERNEL_VERSION=$( pipenv run python -V 2>&1 | cut -d' ' -f2 ) \
@@ -26,8 +25,8 @@ RUN \
 
 # Install kernel for python3
 RUN \
-  mkdir /app/kernel-3.9 && cd /app/kernel-3.9 \
-  && pipenv --python python3.9 \
+  mkdir -p /kernel/3.9 && cd /kernel/3.9 \
+  && PIPENV_VENV_IN_PROJECT=1 pipenv --python python3.9 \
   && pipenv install ipykernel \
   && pipenv --clear \
   && KERNEL_VERSION=$( pipenv run python -V 2>&1 | cut -d' ' -f2 ) \
